@@ -1,0 +1,625 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link To CSS-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Link Swiper CSS -->
+    <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+    <title>MovieCinema</title>
+
+    <!-- fav Icon-->
+    <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
+    <!--Box icon-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+
+</head>
+
+<body>
+    <!--   Header    -->
+    <header>
+        <!--Nav-->
+        <div class="nav container">
+            <!--Logo-->
+            <a href="index.html" class="logo">
+                Movie<span>Cinema</span>
+            </a>
+            <!--Search Box-->
+            <form action="{% url 'searchdata' %}" method="POST">
+                {% csrf_token %}
+                <div class="search-box">
+                    <input type="search" name="Title" id="search-input" placeholder="Search movie"></input>
+                    <button type="submit" value="Insert"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <!--User-->
+            <a href="user.html" class="user">
+                <img src="../static/img/musicjar.png" alt="" class="user-img">
+            </a>
+            <!--Navbar-->
+            <div class="navbar">
+                <a href="#home" class="nav-link nav-active">
+                    <i class='bx bx-home'></i>
+                    <span class="nav-link-title">Home</span>
+                </a>
+                <a href="#popular" class="nav-link">
+                    <i class='bx bxs-hot'></i>
+                    <span class="nav-link-title">Trending</span>
+                </a>
+                <a href="#movies" class="nav-link">
+                    <i class='bx bx-compass'></i>
+                    <span class="nav-link-title">Explore</span>
+                </a>
+                <a href="#" class="nav-link">
+                    <i class='bx bx-tv'></i>
+                    <span class="nav-link-title">Movies</span>
+                </a>
+                <a href="#home" class="nav-link">
+                    <i class='bx bx-heart'></i>
+                    <span class="nav-link-title">Favourites</span>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!-- Home -->
+    <section class="home container" id="home">
+        <!-- Home Image-->
+        <img src="https://www.themoviedb.org/t/p/original/b6er6NU7vtXTEBiBPcE98aSNhnb.jpg" alt="" class="home-img">
+        <!-- Home Text-->
+        <div class="home-text">
+            <h1 class="home-title">Vikram Vedha <br> (2022)</h1>
+            <p>Action, Crime, Thriller</p>
+            <a href="movie/Vikram+Vedha+2022.html" style="margin-bottom: 1rem;" class="watch-btn">
+                <i class='bx bxs-right-arrow'></i></a>
+            <span style="margin-left: 3.2rem;">Click here for Watch</span>
+
+        </div>
+    </section>
+    <!-- Home End-->
+    <!-- Popular Movies Start -->
+    <section class="popular container" id="popular">
+        <!-- Heading-->
+        <div class="heading">
+            <h2 class="heading-title">Popular Movies</h2>
+            <!-- Swiper Buttons-->
+            <div class="swiper-btn">
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+
+            </div>
+        </div>
+        <!-- Content-->
+        <div class="popular-content swiper">
+            <div class="swiper-wrapper">
+                <!-- Movies Box 1-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/wKiOkZTN9lUUUNZLmtnwubZYONg.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">Minions: The Rise of Gru (2022)
+                            </h2>
+                            <span class="movie-type">Animation, Adventure, Comedy
+                            </span>
+                            <a href="movie/Minions+The+Rise+Of+Gru+2022.html" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 2-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/khNVygolU0TxLIDWff5tQlAhZ23.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">
+                                <script
+                                    language="javascript">document.write(unescape('%4B%2E%47%2E%46%3A%20%43%68%61%70%74%65%72%20%32'))</script>
+                            </h2>
+                            <span class="movie-type">Action/Drama</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 3-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/bvU8hIFMQe1OELPjEoydCITjHTN.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">
+                                <script
+                                    language="javascript">document.write(unescape('%52%61%73%68%74%72%61%20%4B%61%76%61%63%68%20%4F%6D'))</script>
+                            </h2>
+                            <span class="movie-type">Mystery/Adventure</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 4-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/lyA7kXCIAG17hVuvFOxlMmmv31A.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">
+                                <script
+                                    language="javascript">document.write(unescape('%44%61%72%6C%69%6E%67%73'))</script>
+                            </h2>
+                            <span class="movie-type">Drama</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 5-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/qgrpQbOpHCi8wSVY4A6vweSTD0Y.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">
+                                <script
+                                    language="javascript">document.write(unescape('%4D%61%6C%61%79%61%6E%6B%75%6E%6A%75'))</script>
+                            </h2>
+                            <span class="movie-type">Drama/Thriller</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 6-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/neMZH82Stu91d3iqvLdNQfqPPyl.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">
+                                <script
+                                    language="javascript">document.write(unescape('%54%68%65%20%4C%6F%73%74%20%43%69%74%79'))</script>
+                            </h2>
+                            <span class="movie-type">Romance/Adventure</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 7-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/abcG0hQJVwCdloTTTwrY0jfJ1Em.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">
+                                <script
+                                    language="javascript">document.write(unescape('%47%6F%6F%64%20%4C%75%63%6B%20%4A%65%72%72%79'))</script>
+                            </h2>
+                            <span class="movie-type">Drama/Crime</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 8-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/odVv1sqVs0KxBXiA8bhIBlPgalx.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">
+                                <script
+                                    language="javascript">document.write(unescape('%4D%6F%6F%6E%66%61%6C%6C'))</script>
+                            </h2>
+                            <span class="movie-type">Sci-fi/Action</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 9-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/ovyWtXhPRKKpSyMUIVYBWiurggY.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">
+                                <script
+                                    language="javascript">document.write(unescape('%4A%75%67%6A%75%67%67%20%4A%65%65%79%6F'))</script>
+                            </h2>
+                            <span class="movie-type">Romance/Drama</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 10-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/irmHAELoYRaECBr8zQAlD4myrfk.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">
+                                <script
+                                    language="javascript">document.write(unescape('%37%37%37%20%43%68%61%72%6C%69%65'))</script>
+                            </h2>
+                            <span class="movie-type">Drama/Adventure</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- Popular Movies End -->
+
+
+
+    <!-- Movies section start -->
+    <section class="movies container" id="movies">
+        <!-- Heading-->
+        <div class="heading">
+            <h2 class="heading-title">Movies and Shows</h2>
+        </div>
+        <!-- Movies  Content-->
+        <div class="movies-content">
+            <!-- Movies Box 1-->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/nEufeZlyAOLqO2brrs0yeF1lgXO.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">RRR (2022)</h2>
+                    <span class="movie-type">Action/Drama</span>
+                    <a href="movie/RRR+2022.html" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Box 2-->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/xIbE0HxhcqD243ThAkTiz6vyh5c.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">
+                        <script
+                            language="javascript">document.write(unescape('%54%68%65%20%57%61%72%72%69%6F%72%72%20%28%32%30%32%32%29'))</script>
+                    </h2>
+                    <span class="movie-type">Adventure</span>
+                    <a href="#" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Box 3-->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/s4T4LGIRErWK7bomHFlSJirGZ4T.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">
+                        <script
+                            language="javascript">document.write(unescape('%53%68%61%62%61%61%73%68%20%4D%69%74%68%75%20%28%32%30%32%32%29'))</script>
+                    </h2>
+                    <span class="movie-type">Drama/Sport</span>
+                    <a href="#" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Box 4-->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/xvYCZ740XvngXK0FNeSNVTJJJ5v.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">
+                        <script
+                            language="javascript">document.write(unescape('%44%6F%72%61%20%61%6E%64%20%74%68%65%20%4C%6F%73%74%20%43%69%74%79%20%6F%66%20%47%6F%6C%64%20%28%32%30%31%39%29'))</script>
+                    </h2>
+                    <span class="movie-type">Family/Adventure</span>
+                    <a href="#" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Box 5-->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/774UV1aCURb4s4JfEFg3IEMu5Zj.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">
+                        <script
+                            language="javascript">document.write(unescape('%56%69%6B%72%61%6D%20%28%32%30%32%32%29'))</script>
+                    </h2>
+                    <span class="movie-type">Action/Mystery</span>
+                    <a href="#" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Box 6-->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/xAG7S6X73B74CeLjo8gcVoWtunr.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">
+                        <script
+                            language="javascript">document.write(unescape('%52%6F%63%6B%65%74%72%79%3A%20%54%68%65%20%4E%61%6D%62%69%20%45%66%66%65%63%74%20%28%32%30%32%32%29'))</script>
+                    </h2>
+                    <span class="movie-type">Drama/Action</span>
+                    <a href="#" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Box 7-->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/fw0oMHiMt9qOuKEJEmzFiCNAnXc.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">
+                        <script
+                            language="javascript">document.write(unescape('%42%68%6F%6F%6C%20%42%68%75%6C%61%69%79%61%61%20%32%20%28%32%30%32%32%29'))</script>
+                    </h2>
+                    <span class="movie-type">Comedy/horror</span>
+                    <a href="#" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Box 8  -->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/9dKCd55IuTT5QRs989m9Qlb7d2B.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">
+                        <script
+                            language="javascript">document.write(unescape('%4A%75%6E%67%6C%65%20%43%72%75%69%73%65%20%28%32%30%32%31%29'))</script>
+                    </h2>
+                    <span class="movie-type">Adventure/Action</span>
+                    <a href="#" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Box 9-->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/yi5KcJqFxy0D6yP8nCfcF8gJGg5.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">
+                        <script
+                            language="javascript">document.write(unescape('%54%68%69%72%74%65%65%6E%20%4C%69%76%65%73%20%28%32%30%32%32%29'))</script>
+                        )
+                    </h2>
+                    <span class="movie-type">Drama/Survival</span>
+                    <a href="#" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Box 10 -->
+            <div class="movie-box">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/s0aVEjT1DWopUrJehACWZyqpO99.jpg" alt=""
+                    class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">
+                        <script
+                            language="javascript">document.write(unescape('%54%68%65%20%50%6F%77%65%72%20%28%32%30%32%31%29'))</script>
+                    </h2>
+                    <span class="movie-type">Action/Drama</span>
+                    <a href="#" class="watch-btn play-btn">
+                        <i class='bx bxs-right-arrow'></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Movies section End -->
+
+    <!-- Hollywood Movies Start -->
+    <section class="popular container" id="popular">
+        <!-- Heading-->
+        <div class="heading">
+            <h2 class="heading-title">Hollywood Movies</h2>
+            <!-- Swiper Buttons-->
+            <div class="swiper-btn">
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+
+            </div>
+        </div>
+        <!-- Content-->
+        <div class="popular-content swiper">
+            <div class="swiper-wrapper">
+                <!-- Movies Box 1-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/ggf37TpcKaxwguhvtNn6MQpyqBn.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">The Greatest Beer Run Ever (2022)</h2>
+                            <span class="movie-type">Comedy, War, Drama</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 2-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/3WdkhaLCzimhV4f37ZIqeWGfl6Y.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">Blank (2022)</h2>
+                            <span class="movie-type">Science Fiction, Drama, Thriller
+                            </span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 3-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/8fjHguUMC8KTeIIPln9KogrYLgO.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">Carmen (2022)</h2>
+                            <span class="movie-type">Drama</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 4-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/j8gxijktrJGsaIvyB4qK5dFFgtw.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">Bandit (2022)
+                            </h2>
+                            <span class="movie-type">Crime, Drama, History
+                            </span>
+                            <a href="" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Movies Box 5-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/ntD0ieBgZ1AlV0tAam3aeFDH6k7.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">Dig (2022)</h2>
+                            <span class="movie-type">Thriller
+                            </span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 6-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/fH0MWC6ieMk547y6Lix8VCCc2Ru.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">Don't Worry Darling (2022)</h2>
+                            <span class="movie-type">Drama, Mystery, Thriller,
+                            </span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 7-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/a6welBP7DtjHDsr6fwT5IuCS33f.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">Catherine Called Birdy (2022)</h2>
+                            <span class="movie-type">Drama, Adventure, History
+                            </span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Movies Box 8-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/bumiqYiXyC2vbY1yJfMpkClvj2I.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">Give Me Five (2022)</h2>
+                            <span class="movie-type">Comedy, Romance, Drama
+                            </span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 9-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/bSqpOGzaKBdGkBLmcm1JJIVryYy.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">The Infernal Machine (2022)</h2>
+                            <span class="movie-type">Thriller
+                            </span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movies Box 10-->
+                <div class="swiper-slide">
+                    <div class="movie-box">
+                        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/pXC8JJbfnRWtbD8i2yKFqqWEO4X.jpg"
+                            alt="" class="movie-box-img">
+                        <div class="box-text">
+                            <h2 class="movie-title">The Enforcer (2022)</h2>
+                            <span class="movie-type">Action, Thriller, Drama</span>
+                            <a href="#" class="watch-btn play-btn">
+                                <i class='bx bxs-right-arrow'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- Hollywood Movies End -->
+
+
+    <!-- Next Page-->
+    <div class="next-page">
+        <a href="#" class="next-btn">Next Page</a>
+    </div>
+    <!-- Copyright-->
+    <div class="copyright">
+        <p>&#169; MovieCinema All Right Reserved</p>
+    </div>
+
+    <!-- Link Swiper JS-->
+    <script src="../static/js/swiper-bundle.min.js"></script>
+    <!-- Link to JS-->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/swiper-js.min.js' %}"></script>
+    <script src="{% static 'js/dash.all.min.js' %}"></script>
+</body>
+
+</html>

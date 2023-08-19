@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% for i in queryset %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content=": MovieCinema" />
+    <meta property="og:description" content="" />
+    <meta property="og:url" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="keywords" content="" />
+
+    <!-- Link To CSS-->
+    <link rel="stylesheet" href="../../../static/css/style.css">
+    <!-- Link Swiper CSS -->
+    <link rel="stylesheet" href="../../../static/css/swiper-bundle.min.css">
+    <title> {{i.Title}} : MovieCinema</title>
+
+    <!-- fav Icon-->
+    <link rel="fav icon" href="../../../static/img/favicon.png" type="image/x-icon">
+    <!--Box icon-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+
+    {% comment %} <script type="text/javascript">
+        var isadb = true;
+        var tryCount = 0; var minimalUserResponseInMiliseconds = 200;
+        function check() {
+            console.clear(); before = new Date().getTime(); debugger; after = new Date().getTime();
+            if (after - before > minimalUserResponseInMiliseconds) {
+                document.write(" Dont open Developer Tools. "); self.location.replace(window.location.protocol + window.location.href.substring(window.location.protocol.length));
+            } else { before = null; after = null; delete before; delete after; } setTimeout(check, 100);
+        } check();
+        window.onload = function () {
+            document.addEventListener("contextmenu", function (e) { e.preventDefault(); }, false); document.addEventListener("keydown", function (e) {
+                if (e.ctrlKey && e.shiftKey && e.keyCode == 73) { disabledEvent(e); }
+                if (e.ctrlKey && e.shiftKey && e.keyCode == 74) { disabledEvent(e); }
+                if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { disabledEvent(e); }
+                if (e.ctrlKey && e.keyCode == 85) { disabledEvent(e); }
+                if (event.keyCode == 123) { disabledEvent(e); }
+            }, false); function disabledEvent(e) { if (e.stopPropagation) { e.stopPropagation(); } else if (window.event) { window.event.cancelBubble = true; } e.preventDefault(); return false; }
+        };
+
+        function devtoolIsOpening() {
+            console.clear();
+            let before = new Date().getTime();
+            debugger;
+            let after = new Date().getTime();
+            if (after - before > 200) {
+                document.write(" Dont open Developer Tools. ");
+                window.location.replace("https://www.google.de");
+            }
+            setTimeout(devtoolIsOpening, 100);
+        }
+        devtoolIsOpening();
+    </script> {% endcomment %}
+    <style>
+        
+        .button-74 {
+          background-color: #fbeee0;
+          border: 2px solid #422800;
+          border-radius: 30px;
+          box-shadow: #422800 4px 4px 0 0;
+          color: #422800;
+          cursor: pointer;
+          display: inline-block;
+          font-weight: 600;
+          font-size: 18px;
+          padding: 0 18px;
+          line-height: 50px;
+          text-align: center;
+          text-decoration: none;
+          user-select: none;
+          -webkit-user-select: none;
+          touch-action: manipulation;
+        }
+        
+        .button-74:hover {
+          background-color: #fff;
+        }
+        
+        .button-74:active {
+          box-shadow: #422800 2px 2px 0 0;
+          transform: translate(2px, 2px);
+        }
+        
+        @media (min-width: 768px) {
+          .button-74 {
+            min-width: 120px;
+            padding: 0 25px;
+          }
+        }
+
+
+.button-85 {
+  padding: 0.6em 2em;
+  border: none;
+  outline: none;
+  color: rgb(255, 255, 255);
+  background: #111;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-85:before {
+  content: "";
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing-button-85 20s linear infinite;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+@keyframes glowing-button-85 {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.button-85:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #222;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+    </style>
+</head>
+
+<body>
+    <!--   Header    -->
+    <header>
+        <!--Nav-->
+        <div class="nav container">
+            <!--Logo-->
+            <a href="../index.html" class="logo">
+                Movie<span>Cinema</span>
+            </a>
+            <!--Search Box-->
+            <form action="{% url 'searchdata' %}" method="POST">
+                {% csrf_token %}
+                <div class="search-box">
+                    <input type="search" name="Title" id="search-input" placeholder="Search movie"></input>
+                    <button type="submit" value="Insert"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <!--User-->
+            <a href="#" class="user">
+                <img src="../../../static/img/musicjar.png" alt="" class="user-img">
+            </a>
+            <!--Navbar-->
+            <div class="navbar">
+                <a href="../index.html" class="nav-link nav-active">
+                    <i class='bx bx-home'></i>
+                    <span class="nav-link-title">Home</span>
+                </a>
+                <a href="#home" class="nav-link">
+                    <i class='bx bxs-hot'></i>
+                    <span class="nav-link-title">Trending</span>
+                </a>
+                <a href="#home" class="nav-link">
+                    <i class='bx bx-compass'></i>
+                    <span class="nav-link-title">Explore</span>
+                </a>
+                <a href="#home" class="nav-link">
+                    <i class='bx bx-tv'></i>
+                    <span class="nav-link-title">Movies</span>
+                </a>
+                <a href="#home" class="nav-link">
+                    <i class='bx bx-heart'></i>
+                    <span class="nav-link-title">Favourites</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- Play Movie Container-->
+    <div class="play-container container">
+        <!-- Play Image-->
+        <img src="{{i.image}}" alt="" class="play-img'">
+
+        <!-- Play text-->
+
+        <div class="play-text">
+            <h2>{{i.Title}}</h2>
+            <!-- Rating -->
+            <div class="rating">
+                <i class='bx bxs-star'></i>
+                <i class='bx bxs-star'></i>
+                <i class='bx bxs-star'></i>
+                <i class='bx bxs-star'></i>
+                <i class='bx bxs-star-half'></i>
+
+            </div>
+            <!-- Tags-->
+            <div class="tags">
+                <span>Animation</span>
+                <span>Adventure</span>
+                <span>Comedy</span>
+            </div>
+
+            <i class='bx bxs-right-arrow watch-btn'></i>
+            <span style="margin-left: 3.2rem; margin-bottom: 0.60rem;">Click here for Watch</span>
+            <div class="video-container">
+                <!-- Video BOx-->
+                <div class="video-box">
+                    <video id="myvideo" poster="../../../static/img/Disclaimer.jpg" allow="autoplay" frameborder="no" scrolling="yes" allowfullscreen="yes" style="width: 100%" controls autoplay>
+                        <source src="" allow="autoplay" type="video/mp4" id="src1"> 
+                        Your browser does not support the video tag. 
+                    </video>
+                    {% for item in dLink%} 
+                        <button class="button-74" role="button" onclick="document.getElementById('myvideo').src = document.getElementById('src1').src = '{{item}}' ">Play Video</button>{% endfor %}
+                    {% for item in mLink%}
+                        <button class="button-74" role="button" onclick="document.getElementById('myvideo').src = document.getElementById('src1').src = '{{item}}' ">Lazy Play</button>
+                    {% endfor %}
+                </div>
+                <!-- Close video-->
+                <i class='bx bx-x close-video'></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-movie container">
+        <h2>{{i.Title}}</h2>
+        <p>{{i.description}}</p>
+        <h2>Director </h2>
+
+        <h6>S. S. Rajamouli<br></h6>
+
+
+        <!-- Movie Cast -->
+        <h2 class="cast-heading">Movie Cast</h2>
+
+        <div class="cast">
+            {% for j in casts %}
+            <div class="cast-box">
+                <img src="{{j.urls}}" alt="{{j.casts}}" class="cast-img">
+                <span class="cast-title">{{j.casts}}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <class="download">
+            <div class="download-title" style="
+            text-align: left;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 1.6rem 0;
+            color: var(--main-color);"> Movie Download Links</div>
+            <div class="download-links">
+                {% for item in dLink%}
+                <button class="button-85" role="button"><a href="{{item}}" target="_blank">Download <script type="javascript">
+                    function getSize() {
+                        fetch("{{item}}")
+                        .then(response => {
+                            const size = response.headers.get("Content-Length");
+                            document.write(`${size} bytes`);
+                        });
+                    }
+                    window.addEventListener('load', getSize);
+                    </script></a></button>
+                {% endfor %}
+            </div>
+
+            <div class="download-title" style="
+            text-align: left;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 1.6rem 0;
+            color: var(--main-color);"> Movie Trailer Links</div>
+            <div class="download-links">
+                {% for item in tLink%}
+                <button><a onclick="setPlaySrc(this)" style="cursor: pointer" data-url="{{item}}"> Trailer</a></button>
+                {% endfor %}
+            </div>
+
+            {% comment %} <iframe id="player-iframe" src=" "></iframe>
+            <ul class="episodes range">
+                <li>
+                    <a onclick="setPlaySrc(this)" style="cursor: pointer" class="source-link active"
+                        data-url="https://vidembed.me/streaming.php?id=NjcwMQ==&amp;title=Avatar">
+                        Server</a>
+                <li>
+                    <a onclick="setPlaySrc(this)" style="cursor: pointer" class="source-link "
+                        data-url="https://sbplay">
+                        server</a>
+                </li>
+            </ul> {% endcomment %}
+    </div>
+
+    </div>
+    {% endfor %}
+
+
+    <div class="copyright">
+        <p>&#169; MovieCinema All Right Reserved</p>
+    </div>
+    <!-- Link Swiper JS-->
+    <script src="../../../static/js/swiper-bundle.min.js"></script>
+    <!-- Link to JS-->
+    <script src="../../../static/js/main.js"></script>
+    <script src="../../../static/js/swiper-js.min.js"></script>
+    <script src="../../../static/js/dash.all.min.js"></script>
+
+</body>

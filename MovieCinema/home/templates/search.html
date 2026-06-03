@@ -1,0 +1,13 @@
+
+
+<center> 
+    <h1>Movie Preview</h1>
+    <br>
+    <hr>
+    {% for i in queryset%}
+    <h2>Movie Title : {{i.Title}} </h2><br>
+    <img src="{{i.image}}" alt="" class="home-img"><br><br>
+    <p>{{i.description}}</p>
+    <br>
+    <hr>
+<center>

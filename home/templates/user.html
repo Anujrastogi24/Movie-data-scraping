@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260504e">
+    <title>User Dashboard : MovieCinema</title>
+</head>
+
+<body>
+    <main class="admin-page container">
+        <div class="admin-header">
+            <a href="{% url 'home' %}" class="logo">Movie<span>Cinema</span></a>
+            <nav class="admin-actions" aria-label="Admin navigation">
+                <a href="/admin/" class="admin-link">Django Admin</a>
+                <a href="{% url 'previewdata' %}" class="admin-link">Preview</a>
+                <a href="/logout" class="admin-link">Logout</a>
+            </nav>
+        </div>
+
+        <section class="admin-panel">
+            <div class="admin-panel-heading">
+                <h1>Add Movie</h1>
+                <p>Fill in the movie details, links, and playback sources.</p>
+            </div>
+            <form action="{% url 'adddata' %}" method="POST" class="movie-form">
+                {% csrf_token %}
+                <label>
+                    <span>Movie Title</span>
+                    <input type="text" name="TITLE" required>
+                </label>
+                <label class="field-wide">
+                    <span>Movie Description</span>
+                    <textarea name="DESCRIPTION" rows="5" required></textarea>
+                </label>
+                <label>
+                    <span>Poster Image Link</span>
+                    <input type="url" name="IMAGE" placeholder="https://...">
+                </label>
+                <label>
+                    <span>Genres</span>
+                    <input type="text" name="GENRES" placeholder="Action, Drama, Thriller">
+                </label>
+                <label>
+                    <span>Movie Video Links</span>
+                    <textarea name="MLINK" rows="4" placeholder="One direct mp4/video file link per line"></textarea>
+                </label>
+                <label>
+                    <span>Embedded Player Links</span>
+                    <textarea name="EMBEDLINK" rows="4" placeholder="One iframe/embed URL per line"></textarea>
+                </label>
+                <label>
+                    <span>Trailer Links</span>
+                    <textarea name="TLINK" rows="3" placeholder="One trailer link per line"></textarea>
+                </label>
+                <label>
+                    <span>Download Links</span>
+                    <textarea name="DLINK" rows="3" placeholder="One download link per line"></textarea>
+                </label>
+                <div class="form-actions">
+                    <button type="submit">Insert Movie</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>

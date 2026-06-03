@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.Python
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# Django
+*.log
+local_settings.py
+*.sqlite3
+*.sqlite3*
+db.fixed.sqlite3
+*.backup-*
+*.readonly-*
+media/
+
+# Archives / dumps
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# Caches
+.cache/
+*.pid
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Secrets / local env
+.env
+*.env

@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Movie Preview : MovieCinema</title>
+</head>
+
+<body>
+    <main class="preview-page container">
+        <div class="admin-header">
+            <a href="{% url 'home' %}" class="logo">Movie<span>Cinema</span></a>
+            <div>
+                <a href="{% url 'user' %}" class="admin-link">Add Movie</a>
+                <a href="/admin/" class="admin-link">Django Admin</a>
+            </div>
+        </div>
+
+        <section class="movies" id="movies">
+            <div class="heading">
+                <h1 class="heading-title">Movie Preview</h1>
+            </div>
+            <div class="movies-content">
+                {% for movie in movies %}
+                <div class="movie-box">
+                    <img src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ movie.Title }}" class="movie-box-img">
+                    <div class="box-text">
+                        <h2 class="movie-title">{{ movie.Title }}</h2>
+                        <span class="movie-type">{{ movie.genres|default:"Movie" }}</span>
+                        <a href="{% url 'movie_detail' movie.id %}" class="watch-btn play-btn" aria-label="Preview {{ movie.Title }}">&#9658;</a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-state">
+                    <h2>No movies added yet</h2>
+                    <p>Add a movie from the dashboard or Django admin.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

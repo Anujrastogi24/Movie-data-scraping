@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260602a">
+    <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+    <title>MovieCinema</title>
+    <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="nav container">
+            <a href="{% url 'home' %}" class="logo">Movie<span>Cinema</span></a>
+            <nav class="site-menu" aria-label="Primary navigation">
+                <a href="{% url 'home' %}" class="{% if not selected_type and not selected_genre and not selected_year %}active{% endif %}">Home</a>
+                <a href="{% url 'home' %}?type=movie" class="{% if selected_type == 'movie' %}active{% endif %}">Movies</a>
+                <a href="{% url 'home' %}?type=tv" class="{% if selected_type == 'tv' %}active{% endif %}">TV Shows</a>
+                <div class="menu-dropdown">
+                    <button type="button" class="{% if selected_genre %}active{% endif %}">Genre <i class="bx bx-chevron-down"></i></button>
+                    <div class="dropdown-menu">
+                        {% for genre in genres %}
+                        <a href="{% url 'home' %}?genre={{ genre|urlencode }}">{{ genre }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="menu-dropdown">
+                    <button type="button" class="{% if selected_year %}active{% endif %}">Year <i class="bx bx-chevron-down"></i></button>
+                    <div class="dropdown-menu year-menu">
+                        {% for year in years %}
+                        <a href="{% url 'home' %}?year={{ year }}">{{ year }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </nav>
+            <form action="{% url 'home' %}" method="GET" class="header-search" autocomplete="off"
+                  data-suggest-url="{% url 'suggest_api' %}" data-import-url="{% url 'import_movie' %}">
+                <div class="search-box">
+                    <input type="search" name="q" id="search-input" value="{{ query }}"
+                           placeholder="Search movie" role="combobox" aria-expanded="false"
+                           aria-autocomplete="list" aria-controls="search-suggestions">
+                    <button type="submit" aria-label="Search"><i class="bx bx-search"></i></button>
+                </div>
+                <ul id="search-suggestions" class="search-suggestions" role="listbox" hidden></ul>
+            </form>
+        </div>
+    </header>
+
+    {% if featured_movie %}
+    <section class="home container" id="home">
+        <img src="{{ featured_movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ featured_movie.Title }}" class="home-img">
+        <div class="home-text">
+            <h1 class="home-title">{{ featured_movie.Title }}</h1>
+            <p>{{ featured_movie.genres|default:"Movie" }}</p>
+            <a href="{% url 'movie_detail' featured_movie.id %}" class="watch-btn" aria-label="View {{ featured_movie.Title }}">
+                <i class="bx bxs-right-arrow"></i>
+            </a>
+            <span class="watch-label">View details and watch</span>
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="genres container" id="genres">
+        <div class="heading">
+            <h2 class="heading-title">Find By Genre</h2>
+        </div>
+        <div class="genre-filter">
+            <a href="{% url 'home' %}" class="{% if not selected_genre %}active{% endif %}">All</a>
+            {% for genre in genres %}
+            <a href="{% url 'home' %}?genre={{ genre|urlencode }}" class="{% if selected_genre == genre %}active{% endif %}">{{ genre }}</a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="movies container" id="movies">
+        <div class="heading">
+            <h2 class="heading-title">
+                {% if query %}Search Results{% elif selected_genre %}{{ selected_genre }} Movies{% else %}Movies and Shows{% endif %}
+            </h2>
+        </div>
+        {% if movies %}
+        <div class="movies-content">
+            {% for movie in movies %}
+            <div class="movie-box">
+                <img src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ movie.Title }}" class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">{{ movie.Title }}</h2>
+                    <span class="movie-type">{{ movie.genres|default:"Movie" }}</span>
+                    <a href="{% url 'movie_detail' movie.id %}" class="watch-btn play-btn" aria-label="Open {{ movie.Title }}">
+                        <i class="bx bxs-right-arrow"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h2>No movies found</h2>
+            <p>Try another search, genre, or year.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    {% if query and similar_results %}
+    <section class="movies container" id="similar-results">
+        <div class="heading">
+            <h2 class="heading-title">Top Matches for "{{ query }}"</h2>
+            <p class="heading-sub">Click a title to add it to MovieCinema and watch.</p>
+        </div>
+        <div class="movies-content">
+            {% for item in similar_results %}
+            <a class="movie-box import-link"
+               href="{% url 'import_movie' %}?title={{ item.title|urlencode }}&amp;year={{ item.year|urlencode }}&amp;imdb_url={{ item.imdb_url|urlencode }}"
+               aria-label="Add {{ item.label }} to MovieCinema">
+                <img src="{{ item.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ item.title }}" class="movie-box-img" loading="lazy" onerror="this.src='/static/img/MovieCinema.jpg'">
+                <div class="box-text">
+                    <h2 class="movie-title">{{ item.title }}</h2>
+                    <span class="movie-type">{% if item.year %}{{ item.year }} &middot; {% endif %}{{ item.source }}</span>
+                    <span class="watch-btn play-btn import-badge" aria-hidden="true"><i class="bx bx-plus"></i></span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if query and recommended_movies %}
+    <section class="movies container" id="recommended">
+        <div class="heading">
+            <h2 class="heading-title">Recommended For You</h2>
+        </div>
+        <div class="movies-content">
+            {% for movie in recommended_movies %}
+            <div class="movie-box">
+                <img src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ movie.Title }}" class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">{{ movie.Title }}</h2>
+                    <span class="movie-type">{{ movie.genres|default:"Movie" }}</span>
+                    <a href="{% url 'movie_detail' movie.id %}" class="watch-btn play-btn" aria-label="Open {{ movie.Title }}">
+                        <i class="bx bxs-right-arrow"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <div class="copyright">
+        <p>&#169; MovieCinema All Right Reserved</p>
+    </div>
+
+    <div id="import-overlay" class="import-overlay" hidden>
+        <div class="import-card">
+            <span class="import-spinner" aria-hidden="true"></span>
+            <p>Fetching movie details…</p>
+        </div>
+    </div>
+
+    <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}?v=20260504i"></script>
+    <script src="{% static 'js/swiper-js.min.js' %}"></script>
+    <script src="{% static 'js/search-suggest.js' %}?v=20260602b"></script>
+</body>
+
+</html>

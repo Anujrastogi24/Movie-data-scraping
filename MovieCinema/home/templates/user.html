@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User : Dashboard</title>
+</head>
+<body>
+    <!-- Welcome {{request.user}} -->
+    <br>
+    <br>
+    <a href="/logout"> Logout</a>
+    <center>
+        <h1>Add Movies</h1>
+        <form action="{% url 'adddata' %}" method="POST">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td>Movie Title</td>
+                    <td><input type="text" name="TITLE" ></td>
+                </tr>
+                <tr>
+                    <td>Movie Description</td>
+                    <td><input type="textarea" name="DESCRIPTION" ></td>
+                </tr>
+                <tr>
+                    <td>Poster Image Link</td>
+                    <td><input type="link" name="IMAGE" ></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Insert"></td>
+                </tr>
+            </table>
+        </form>
+    </center>
+</body>
+</html>

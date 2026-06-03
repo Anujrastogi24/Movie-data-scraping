@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="{{ movie.Title }} : MovieCinema">
+    <meta property="og:description" content="{{ movie.description }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260603a">
+    <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+    <title>{{ movie.Title }} : MovieCinema</title>
+    <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="nav container">
+            <a href="{% url 'home' %}" class="logo">Movie<span>Cinema</span></a>
+            <nav class="site-menu" aria-label="Primary navigation">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'home' %}?type=movie">Movies</a>
+                <a href="{% url 'home' %}?type=tv">TV Shows</a>
+                <div class="menu-dropdown">
+                    <button type="button">Genre <i class="bx bx-chevron-down"></i></button>
+                    <div class="dropdown-menu">
+                        {% for genre in nav_genres %}
+                        <a href="{% url 'home' %}?genre={{ genre|urlencode }}">{{ genre }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="menu-dropdown">
+                    <button type="button">Year <i class="bx bx-chevron-down"></i></button>
+                    <div class="dropdown-menu year-menu">
+                        {% for year in years %}
+                        <a href="{% url 'home' %}?year={{ year }}">{{ year }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </nav>
+            <form action="{% url 'home' %}" method="GET" class="header-search">
+                <div class="search-box">
+                    <input type="search" name="q" id="search-input" placeholder="Search movie">
+                    <button type="submit" aria-label="Search"><i class="bx bx-search"></i></button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <section class="movie-info-panel container">
+        <div class="movie-poster-frame">
+            <img src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ movie.Title }}" class="movie-poster-img">
+        </div>
+        <div class="movie-info-content">
+            <h1>{{ movie.Title }}</h1>
+            <p class="movie-overview">{{ movie.description }}</p>
+            <dl class="movie-basics">
+                <div>
+                    <dt>Genres</dt>
+                    <dd>{{ movie.genres|default:"Movie" }}</dd>
+                </div>
+                <div>
+                    <dt>Players</dt>
+                    <dd>{{ player_links|length }} sources</dd>
+                </div>
+                <div>
+                    <dt>Downloads</dt>
+                    <dd>{{ dLink|length }} links</dd>
+                </div>
+            </dl>
+        </div>
+    </section>
+
+    <section class="inline-player-section container">
+        <div class="heading">
+            <h2 class="heading-title">Watch {{ movie.Title }}</h2>
+        </div>
+        {% if player_links %}
+        <div class="server-list inline-server-list">
+            {% for item in player_links %}
+            <button class="server-btn inline-server-btn{% if forloop.first %} active{% endif %}" type="button" data-src="{{ item.url }}" data-player="{{ item.player }}">{{ item.label }}</button>
+            {% endfor %}
+        </div>
+        <div class="inline-player" data-current-player="{{ player_links.0.player }}">
+            {% if player_links.0.player == "iframe" %}
+            <iframe id="inline-embed-player" src="{{ player_links.0.url }}" title="{{ movie.Title }} embedded player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <video id="inline-video-player" class="is-hidden" poster="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" controls playsinline preload="metadata">
+                <source src="" type="video/mp4" id="inline-video-source">
+                Your browser does not support the video tag.
+            </video>
+            {% else %}
+            <iframe id="inline-embed-player" class="is-hidden" title="{{ movie.Title }} embedded player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <video id="inline-video-player" poster="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" controls playsinline preload="metadata">
+                <source src="{{ player_links.0.url }}" type="video/mp4" id="inline-video-source">
+                Your browser does not support the video tag.
+            </video>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h2>Player Not Found</h2>
+            <p>This movie is not available to watch right now.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="about-movie container">
+        <h2>About {{ movie.Title }}</h2>
+        <div class="tags">
+            {% for genre in genres %}
+            <a href="{% url 'home' %}?genre={{ genre|urlencode }}">{{ genre }}</a>
+            {% empty %}
+            <span>Movie</span>
+            {% endfor %}
+        </div>
+        <p>{{ movie.description }}</p>
+
+        {% if dLink %}
+        <div class="download">
+            <h2 class="download-title">Movie Download Links</h2>
+            <div class="download-links">
+                {% for item in dLink %}
+                <a href="{{ item }}" target="_blank" rel="noopener">Download {{ forloop.counter }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        {% elif download_status == "pending" %}
+        <div class="download">
+            <h2 class="download-title">Movie Download Links</h2>
+            <span class="download-pending">Downloads pending — no authorized links available yet.</span>
+        </div>
+        {% endif %}
+
+        {% if watch_providers %}
+        <div class="where-to-watch">
+            <h2 class="download-title">Where to Watch</h2>
+            <div class="provider-list">
+                {% for p in watch_providers %}
+                <div class="provider-card">
+                    <div class="provider-meta">
+                        <span class="provider-name">{{ p.provider_name }}</span>
+                        {% if p.is_free %}
+                        <span class="provider-tag free">Free</span>
+                        {% else %}
+                        <span class="provider-tag paid">Subscription / Rent</span>
+                        {% endif %}
+                    </div>
+                    <a class="provider-watch-btn" href="{{ p.watch_url }}" target="_blank" rel="noopener">
+                        Watch Here <i class="bx bx-link-external"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    {% if recommended_movies %}
+    <section class="movies container">
+        <div class="heading">
+            <h2 class="heading-title">Recommended Movies</h2>
+        </div>
+        <div class="movies-content">
+            {% for item in recommended_movies %}
+            <div class="movie-box">
+                <img src="{{ item.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ item.Title }}" class="movie-box-img">
+                <div class="box-text">
+                    <h2 class="movie-title">{{ item.Title }}</h2>
+                    <span class="movie-type">{{ item.genres|default:"Movie" }}</span>
+                    <a href="{% url 'movie_detail' item.id %}" class="watch-btn play-btn" aria-label="Open {{ item.Title }}">
+                        <i class="bx bxs-right-arrow"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <div class="copyright">
+        <p>&#169; MovieCinema All Right Reserved</p>
+    </div>
+
+    <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}?v=20260504j"></script>
+    <script src="{% static 'js/swiper-js.min.js' %}"></script>
+</body>
+
+</html>

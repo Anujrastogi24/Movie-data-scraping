@@ -6,9 +6,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260602a">
+    <meta name="description" content="MovieCinema — premium streaming. Discover movies and shows, filter by genre, and watch instantly.">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260604a">
     <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
-    <title>MovieCinema</title>
+    <title>MovieCinema | Premium Streaming</title>
     <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
     <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
 </head>
@@ -51,51 +52,82 @@
         </div>
     </header>
 
-    {% if featured_movie %}
-    <section class="home container" id="home">
-        <img src="{{ featured_movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ featured_movie.Title }}" class="home-img">
-        <div class="home-text">
-            <h1 class="home-title">{{ featured_movie.Title }}</h1>
-            <p>{{ featured_movie.genres|default:"Movie" }}</p>
-            <a href="{% url 'movie_detail' featured_movie.id %}" class="watch-btn" aria-label="View {{ featured_movie.Title }}">
-                <i class="bx bxs-right-arrow"></i>
-            </a>
-            <span class="watch-label">View details and watch</span>
+    {% if featured_movie and not query %}
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <img src="{{ featured_movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="" aria-hidden="true">
+        </div>
+        <div class="hero-shade"></div>
+        <div class="hero-inner container">
+            <div class="hero-poster">
+                <img src="{{ featured_movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ featured_movie.Title }}">
+            </div>
+            <div class="hero-body">
+                <div class="hero-tags">
+                    <span class="badge-gold">Featured</span>
+                    <span class="hero-sub">{{ featured_movie.genres|default:"Movie" }}</span>
+                </div>
+                <h1 class="hero-title">{{ featured_movie.Title }}</h1>
+                {% if featured_movie.description %}
+                <p class="hero-desc">{{ featured_movie.description|truncatewords:40 }}</p>
+                {% endif %}
+                <div class="hero-actions">
+                    <a class="btn-gold" href="{% url 'movie_detail' featured_movie.id %}">
+                        <i class="bx bx-play"></i> Watch Now
+                    </a>
+                    <a class="btn-glass" href="{% url 'movie_detail' featured_movie.id %}">
+                        <i class="bx bx-info-circle"></i> More Info
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats container">
+        <div class="stat-card">
+            <span class="stat-number">{{ total_movies }}</span>
+            <span class="stat-label">Titles in Library</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ genres|length }}</span>
+            <span class="stat-label">Genres</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ years|length }}</span>
+            <span class="stat-label">Release Years</span>
         </div>
     </section>
     {% endif %}
 
     <section class="genres container" id="genres">
-        <div class="heading">
-            <h2 class="heading-title">Find By Genre</h2>
+        <div class="section-head">
+            <h2 class="section-title">Discover Genres</h2>
         </div>
-        <div class="genre-filter">
-            <a href="{% url 'home' %}" class="{% if not selected_genre %}active{% endif %}">All</a>
+        <div class="genre-pills">
+            <a href="{% url 'home' %}" class="genre-pill {% if not selected_genre %}active{% endif %}">All</a>
             {% for genre in genres %}
-            <a href="{% url 'home' %}?genre={{ genre|urlencode }}" class="{% if selected_genre == genre %}active{% endif %}">{{ genre }}</a>
+            <a href="{% url 'home' %}?genre={{ genre|urlencode }}" class="genre-pill {% if selected_genre == genre %}active{% endif %}">{{ genre }}</a>
             {% endfor %}
         </div>
     </section>
 
     <section class="movies container" id="movies">
-        <div class="heading">
-            <h2 class="heading-title">
-                {% if query %}Search Results{% elif selected_genre %}{{ selected_genre }} Movies{% else %}Movies and Shows{% endif %}
+        <div class="section-head">
+            <h2 class="section-title">
+                {% if query %}Search Results{% elif selected_genre %}{{ selected_genre }} Movies{% elif selected_year %}Released in {{ selected_year }}{% else %}Trending Now{% endif %}
             </h2>
         </div>
         {% if movies %}
         <div class="movies-content">
             {% for movie in movies %}
-            <div class="movie-box">
-                <img src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ movie.Title }}" class="movie-box-img">
+            <a href="{% url 'movie_detail' movie.id %}" class="movie-box" aria-label="Open {{ movie.Title }}">
+                <img src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ movie.Title }}" class="movie-box-img" loading="lazy">
                 <div class="box-text">
                     <h2 class="movie-title">{{ movie.Title }}</h2>
                     <span class="movie-type">{{ movie.genres|default:"Movie" }}</span>
-                    <a href="{% url 'movie_detail' movie.id %}" class="watch-btn play-btn" aria-label="Open {{ movie.Title }}">
-                        <i class="bx bxs-right-arrow"></i>
-                    </a>
                 </div>
-            </div>
+                <span class="movie-play" aria-hidden="true"><i class="bx bx-play"></i></span>
+            </a>
             {% endfor %}
         </div>
         {% else %}
@@ -108,9 +140,11 @@
 
     {% if query and similar_results %}
     <section class="movies container" id="similar-results">
-        <div class="heading">
-            <h2 class="heading-title">Top Matches for "{{ query }}"</h2>
-            <p class="heading-sub">Click a title to add it to MovieCinema and watch.</p>
+        <div class="section-head">
+            <div>
+                <h2 class="section-title">Top Matches for "{{ query }}"</h2>
+                <p class="section-sub">Click a title to add it to MovieCinema and watch.</p>
+            </div>
         </div>
         <div class="movies-content">
             {% for item in similar_results %}
@@ -121,8 +155,8 @@
                 <div class="box-text">
                     <h2 class="movie-title">{{ item.title }}</h2>
                     <span class="movie-type">{% if item.year %}{{ item.year }} &middot; {% endif %}{{ item.source }}</span>
-                    <span class="watch-btn play-btn import-badge" aria-hidden="true"><i class="bx bx-plus"></i></span>
                 </div>
+                <span class="movie-play import-badge" aria-hidden="true"><i class="bx bx-plus"></i></span>
             </a>
             {% endfor %}
         </div>
@@ -131,29 +165,66 @@
 
     {% if query and recommended_movies %}
     <section class="movies container" id="recommended">
-        <div class="heading">
-            <h2 class="heading-title">Recommended For You</h2>
+        <div class="section-head">
+            <h2 class="section-title">Recommended For You</h2>
         </div>
         <div class="movies-content">
             {% for movie in recommended_movies %}
-            <div class="movie-box">
-                <img src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ movie.Title }}" class="movie-box-img">
+            <a href="{% url 'movie_detail' movie.id %}" class="movie-box" aria-label="Open {{ movie.Title }}">
+                <img src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ movie.Title }}" class="movie-box-img" loading="lazy">
                 <div class="box-text">
                     <h2 class="movie-title">{{ movie.Title }}</h2>
                     <span class="movie-type">{{ movie.genres|default:"Movie" }}</span>
-                    <a href="{% url 'movie_detail' movie.id %}" class="watch-btn play-btn" aria-label="Open {{ movie.Title }}">
-                        <i class="bx bxs-right-arrow"></i>
-                    </a>
                 </div>
-            </div>
+                <span class="movie-play" aria-hidden="true"><i class="bx bx-play"></i></span>
+            </a>
             {% endfor %}
         </div>
     </section>
     {% endif %}
 
-    <div class="copyright">
-        <p>&#169; MovieCinema All Right Reserved</p>
-    </div>
+    <footer class="site-footer">
+        <div class="footer-grid container">
+            <div class="footer-brand">
+                <a href="{% url 'home' %}" class="logo">Movie<span>Cinema</span></a>
+                <p>Your destination for cinematic discovery — browse the latest titles and timeless classics, filter by genre, and watch instantly.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Website"><i class="bx bx-globe"></i></a>
+                    <a href="#" aria-label="Email"><i class="bx bx-envelope"></i></a>
+                    <a href="#" aria-label="Share"><i class="bx bx-share-alt"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Browse</h4>
+                <ul>
+                    <li><a href="{% url 'home' %}?type=movie">Movies</a></li>
+                    <li><a href="{% url 'home' %}?type=tv">TV Shows</a></li>
+                    <li><a href="{% url 'home' %}#genres">Genres</a></li>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Newsletter</h4>
+                <p>Subscribe for the latest releases and recommendations.</p>
+                <form class="footer-news" action="{% url 'home' %}" method="GET" onsubmit="return false;">
+                    <input type="email" placeholder="Email address" aria-label="Email address">
+                    <button type="submit" aria-label="Subscribe"><i class="bx bx-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&#169; MovieCinema Streaming. All rights reserved.</p>
+        </div>
+    </footer>
 
     <div id="import-overlay" class="import-overlay" hidden>
         <div class="import-card">

@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260604a">
+    <title>Edit {{ movie.Title }} : MovieCinema</title>
+    <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <main class="admin-shell container">
+        <div class="admin-topbar">
+            <a href="{% url 'home' %}" class="logo">Movie<span>Cinema</span></a>
+            <nav class="admin-actions" aria-label="Admin navigation">
+                <a href="{% url 'user' %}" class="admin-link ghost"><i class="bx bx-arrow-back"></i> Dashboard</a>
+                <a href="{% url 'movie_detail' movie.id %}" class="admin-link ghost" target="_blank" rel="noopener"><i class="bx bx-link-external"></i> View</a>
+                <a href="/logout" class="admin-link"><i class="bx bx-log-out"></i> Logout</a>
+            </nav>
+        </div>
+
+        <header class="admin-hero">
+            <h1>Edit Movie</h1>
+            <p>Update any field for <strong>{{ movie.Title }}</strong>.</p>
+        </header>
+
+        <section class="admin-panel">
+            <div class="edit-layout">
+                <aside class="edit-preview">
+                    <img id="poster-preview" src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}"
+                         alt="{{ movie.Title }}" onerror="this.src='/static/img/MovieCinema.jpg'">
+                    <span class="status-badge {{ movie.download_status }}">{{ movie.get_download_status_display }}</span>
+                </aside>
+
+                <form action="{% url 'edit_movie' movie.id %}" method="POST" class="movie-form edit-form">
+                    {% csrf_token %}
+                    <label>
+                        <span>Movie Title</span>
+                        <input type="text" name="Title" value="{{ movie.Title }}" required>
+                    </label>
+                    <label>
+                        <span>Genres</span>
+                        <input type="text" name="genres" value="{{ movie.genres }}" placeholder="Action, Drama">
+                    </label>
+                    <label class="field-wide">
+                        <span>Description</span>
+                        <textarea name="description" rows="5">{{ movie.description }}</textarea>
+                    </label>
+                    <label class="field-wide">
+                        <span>Poster Image Link</span>
+                        <input type="url" id="image-input" name="image" value="{{ movie.image }}" placeholder="https://...">
+                    </label>
+                    <label>
+                        <span>Release Year</span>
+                        <input type="text" name="release_year" value="{{ movie.release_year }}" placeholder="2024">
+                    </label>
+                    <label>
+                        <span>Language</span>
+                        <input type="text" name="language" value="{{ movie.language }}" placeholder="English">
+                    </label>
+                    <label>
+                        <span>Rating</span>
+                        <input type="text" name="rating" value="{{ movie.rating }}" placeholder="8.8">
+                    </label>
+                    <label>
+                        <span>Runtime</span>
+                        <input type="text" name="runtime" value="{{ movie.runtime }}" placeholder="148 min">
+                    </label>
+                    <label>
+                        <span>Director</span>
+                        <input type="text" name="director" value="{{ movie.director }}">
+                    </label>
+                    <label>
+                        <span>Download Status</span>
+                        <select name="download_status">
+                            {% for value, label in status_choices %}
+                            <option value="{{ value }}" {% if movie.download_status == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label class="field-wide">
+                        <span>Cast</span>
+                        <textarea name="cast" rows="2" placeholder="Comma or newline separated">{{ movie.cast }}</textarea>
+                    </label>
+                    <label class="field-wide">
+                        <span>Movie Video Links</span>
+                        <textarea name="mLink" rows="3">{{ movie.mLink }}</textarea>
+                    </label>
+                    <label class="field-wide">
+                        <span>Embedded Player Links</span>
+                        <textarea name="embedLink" rows="3">{{ movie.embedLink }}</textarea>
+                    </label>
+                    <label class="field-wide">
+                        <span>Trailer Links</span>
+                        <textarea name="tLink" rows="2">{{ movie.tLink }}</textarea>
+                    </label>
+                    <label class="field-wide">
+                        <span>Download Links</span>
+                        <textarea name="dLink" rows="2">{{ movie.dLink }}</textarea>
+                    </label>
+
+                    <div class="form-actions edit-actions">
+                        <a href="{% url 'user' %}" class="btn-glass"><i class="bx bx-x"></i> Cancel</a>
+                        <button type="submit"><i class="bx bx-save"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+
+            <form action="{% url 'delete_movie' movie.id %}" method="POST" class="danger-zone"
+                  onsubmit="return confirm('Delete “{{ movie.Title|escapejs }}” permanently? This cannot be undone.');">
+                {% csrf_token %}
+                <div>
+                    <h3>Delete this movie</h3>
+                    <p>Permanently remove this title and its watch providers.</p>
+                </div>
+                <button type="submit" class="btn-row delete"><i class="bx bx-trash"></i> Delete Movie</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Live poster preview when the image URL changes.
+        (function () {
+            var input = document.getElementById('image-input');
+            var preview = document.getElementById('poster-preview');
+            if (!input || !preview) return;
+            input.addEventListener('input', function () {
+                preview.src = input.value.trim() || '/static/img/MovieCinema.jpg';
+            });
+        })();
+    </script>
+</body>
+
+</html>

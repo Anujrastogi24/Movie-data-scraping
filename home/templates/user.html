@@ -6,24 +6,55 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260504e">
-    <title>User Dashboard : MovieCinema</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260604a">
+    <title>Admin Dashboard : MovieCinema</title>
+    <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <main class="admin-page container">
-        <div class="admin-header">
+    <main class="admin-shell container">
+        <div class="admin-topbar">
             <a href="{% url 'home' %}" class="logo">Movie<span>Cinema</span></a>
             <nav class="admin-actions" aria-label="Admin navigation">
-                <a href="/admin/" class="admin-link">Django Admin</a>
-                <a href="{% url 'previewdata' %}" class="admin-link">Preview</a>
-                <a href="/logout" class="admin-link">Logout</a>
+                <a href="{% url 'home' %}" class="admin-link ghost"><i class="bx bx-home-alt"></i> Site</a>
+                <a href="/admin/" class="admin-link ghost"><i class="bx bx-cog"></i> Django Admin</a>
+                <a href="/logout" class="admin-link"><i class="bx bx-log-out"></i> Logout</a>
             </nav>
         </div>
 
-        <section class="admin-panel">
+        <header class="admin-hero">
+            <h1>Admin Dashboard</h1>
+            <p>Add, edit, and manage every title in the MovieCinema library.</p>
+        </header>
+
+        <section class="admin-stats">
+            <div class="admin-stat">
+                <i class="bx bx-film"></i>
+                <div>
+                    <span class="admin-stat-num">{{ total_movies }}</span>
+                    <span class="admin-stat-label">Total Titles</span>
+                </div>
+            </div>
+            <div class="admin-stat">
+                <i class="bx bx-purchase-tag"></i>
+                <div>
+                    <span class="admin-stat-num">{{ total_genres }}</span>
+                    <span class="admin-stat-label">Genres</span>
+                </div>
+            </div>
+            <div class="admin-stat">
+                <i class="bx bx-time-five"></i>
+                <div>
+                    <span class="admin-stat-num">{{ pending_count }}</span>
+                    <span class="admin-stat-label">Downloads Pending</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-panel" id="add">
             <div class="admin-panel-heading">
-                <h1>Add Movie</h1>
+                <h2><i class="bx bx-plus-circle"></i> Add Movie</h2>
                 <p>Fill in the movie details, links, and playback sources.</p>
             </div>
             <form action="{% url 'adddata' %}" method="POST" class="movie-form">
@@ -32,17 +63,17 @@
                     <span>Movie Title</span>
                     <input type="text" name="TITLE" required>
                 </label>
+                <label>
+                    <span>Genres</span>
+                    <input type="text" name="GENRES" placeholder="Action, Drama, Thriller">
+                </label>
                 <label class="field-wide">
                     <span>Movie Description</span>
                     <textarea name="DESCRIPTION" rows="5" required></textarea>
                 </label>
-                <label>
+                <label class="field-wide">
                     <span>Poster Image Link</span>
                     <input type="url" name="IMAGE" placeholder="https://...">
-                </label>
-                <label>
-                    <span>Genres</span>
-                    <input type="text" name="GENRES" placeholder="Action, Drama, Thriller">
                 </label>
                 <label>
                     <span>Movie Video Links</span>
@@ -61,9 +92,65 @@
                     <textarea name="DLINK" rows="3" placeholder="One download link per line"></textarea>
                 </label>
                 <div class="form-actions">
-                    <button type="submit">Insert Movie</button>
+                    <button type="submit"><i class="bx bx-save"></i> Insert Movie</button>
                 </div>
             </form>
+        </section>
+
+        <section class="admin-panel" id="manage">
+            <div class="admin-panel-heading">
+                <h2><i class="bx bx-list-ul"></i> Manage Library</h2>
+                <p>{{ total_movies }} title{{ total_movies|pluralize }} — edit or remove any entry.</p>
+            </div>
+
+            {% if movies %}
+            <div class="manage-table-wrap">
+                <table class="manage-table">
+                    <thead>
+                        <tr>
+                            <th class="col-poster">Poster</th>
+                            <th>Title</th>
+                            <th class="col-genres">Genres</th>
+                            <th class="col-status">Downloads</th>
+                            <th class="col-actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movie in movies %}
+                        <tr>
+                            <td class="col-poster">
+                                <img src="{{ movie.image|default:'/static/img/MovieCinema.jpg' }}" alt="{{ movie.Title }}"
+                                     class="manage-thumb" loading="lazy" onerror="this.src='/static/img/MovieCinema.jpg'">
+                            </td>
+                            <td>
+                                <a href="{% url 'movie_detail' movie.id %}" class="manage-title" target="_blank" rel="noopener">{{ movie.Title }}</a>
+                                {% if movie.release_year %}<span class="manage-year">{{ movie.release_year }}</span>{% endif %}
+                            </td>
+                            <td class="col-genres">{{ movie.genres|default:"—" }}</td>
+                            <td class="col-status">
+                                <span class="status-badge {{ movie.download_status }}">{{ movie.get_download_status_display }}</span>
+                            </td>
+                            <td class="col-actions">
+                                <div class="row-actions">
+                                    <a href="{% url 'edit_movie' movie.id %}" class="btn-row edit"><i class="bx bx-edit-alt"></i> Edit</a>
+                                    <form action="{% url 'delete_movie' movie.id %}" method="POST"
+                                          onsubmit="return confirm('Delete “{{ movie.Title|escapejs }}” permanently?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-row delete"><i class="bx bx-trash"></i> Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h2>No movies yet</h2>
+                <p>Add your first title using the form above.</p>
+            </div>
+            {% endif %}
         </section>
     </main>
 </body>

@@ -231,6 +231,7 @@ def index(request):
     return render(request, "index.html", {
         "movies": movies,
         "featured_movie": movies.first(),
+        "total_movies": Movie.objects.count(),
         "genres": _genre_list(),
         "years": _year_list(),
         "query": query,
@@ -255,8 +256,12 @@ def adddata(request):
     if request.method != "POST":
         return redirect("user")
 
+    title = request.POST.get("TITLE", "").strip()
+    if not title:
+        return redirect("user")
+
     Movie.objects.create(
-        Title=request.POST.get("TITLE", "").strip(),
+        Title=title,
         description=request.POST.get("DESCRIPTION", "").strip(),
         image=request.POST.get("IMAGE", "").strip(),
         genres=request.POST.get("GENRES", "").strip(),
@@ -265,7 +270,52 @@ def adddata(request):
         tLink=request.POST.get("TLINK", "").strip(),
         dLink=request.POST.get("DLINK", "").strip(),
     )
-    return redirect("previewdata")
+    return redirect("user")
+
+
+@login_required(login_url="/login.html")
+def edit_movie(request, movie_id):
+    """Admin edit screen — update every editable field of a movie."""
+    movie = get_object_or_404(Movie, pk=movie_id)
+
+    if request.method == "POST":
+        title = request.POST.get("Title", "").strip()
+        if title:
+            movie.Title = title
+        movie.description = request.POST.get("description", "").strip()
+        movie.image = request.POST.get("image", "").strip()
+        movie.genres = request.POST.get("genres", "").strip()
+        movie.mLink = request.POST.get("mLink", "").strip()
+        movie.embedLink = request.POST.get("embedLink", "").strip()
+        movie.tLink = request.POST.get("tLink", "").strip()
+        movie.dLink = request.POST.get("dLink", "").strip()
+        movie.release_year = request.POST.get("release_year", "").strip()
+        movie.language = request.POST.get("language", "").strip()
+        movie.rating = request.POST.get("rating", "").strip()
+        movie.runtime = request.POST.get("runtime", "").strip()
+        movie.director = request.POST.get("director", "").strip()
+        movie.cast = request.POST.get("cast", "").strip()
+
+        status = request.POST.get("download_status", "").strip()
+        if status in dict(Movie.DownloadStatus.choices):
+            movie.download_status = status
+
+        movie.save()
+        return redirect("user")
+
+    return render(request, "edit.html", {
+        "movie": movie,
+        "status_choices": Movie.DownloadStatus.choices,
+    })
+
+
+@login_required(login_url="/login.html")
+def delete_movie(request, movie_id):
+    """Delete a movie. POST-only so accidental GET navigation can't destroy data."""
+    movie = get_object_or_404(Movie, pk=movie_id)
+    if request.method == "POST":
+        movie.delete()
+    return redirect("user")
 
 
 @login_required(login_url="/login.html")
@@ -295,7 +345,13 @@ def logoutUser(request):
 
 @login_required(login_url="/login.html")
 def userpage(request):
-    return render(request, "user.html")
+    movies = Movie.objects.all().order_by("-id")
+    return render(request, "user.html", {
+        "movies": movies,
+        "total_movies": movies.count(),
+        "total_genres": len(_genre_list()),
+        "pending_count": Movie.objects.filter(download_status="pending").count(),
+    })
 
 
 def searchdata(request):

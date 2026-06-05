@@ -141,3 +141,33 @@ document.querySelectorAll(".inline-server-btn").forEach((button) => {
     setInlinePlayer(button.dataset.src, button.dataset.player);
   });
 });
+
+/* ---- Mobile navigation (hamburger drawer + tap-to-expand menus) ---- */
+(function () {
+  const nav = document.querySelector(".nav");
+  const toggle = document.getElementById("nav-toggle");
+
+  if (nav && toggle) {
+    toggle.addEventListener("click", () => {
+      const open = nav.classList.toggle("nav-open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+
+  // Genre / Year dropdowns: tap to expand inside the drawer.
+  // On desktop (>1024px) the menus open on hover, so we leave them alone.
+  const isMobileNav = () => window.matchMedia("(max-width: 1024px)").matches;
+
+  document.querySelectorAll(".site-menu .menu-dropdown > button").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      if (!isMobileNav()) return;
+      event.preventDefault();
+      const parent = btn.parentElement;
+      const willOpen = !parent.classList.contains("open");
+      document.querySelectorAll(".site-menu .menu-dropdown.open").forEach((open) => {
+        if (open !== parent) open.classList.remove("open");
+      });
+      parent.classList.toggle("open", willOpen);
+    });
+  });
+})();

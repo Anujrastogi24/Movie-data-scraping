@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MovieCinema — premium streaming. Discover movies and shows, filter by genre, and watch instantly.">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260604a">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260605resp">
     <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
     <title>MovieCinema | Premium Streaming</title>
     <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
@@ -18,7 +18,11 @@
     <header>
         <div class="nav container">
             <a href="{% url 'home' %}" class="logo">Movie<span>Cinema</span></a>
-            <nav class="site-menu" aria-label="Primary navigation">
+            <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu"
+                    aria-controls="site-menu" aria-expanded="false">
+                <i class="bx bx-menu"></i>
+            </button>
+            <nav class="site-menu" id="site-menu" aria-label="Primary navigation">
                 <a href="{% url 'home' %}" class="{% if not selected_type and not selected_genre and not selected_year %}active{% endif %}">Home</a>
                 <a href="{% url 'home' %}?type=movie" class="{% if selected_type == 'movie' %}active{% endif %}">Movies</a>
                 <a href="{% url 'home' %}?type=tv" class="{% if selected_type == 'tv' %}active{% endif %}">TV Shows</a>
@@ -234,7 +238,7 @@
     </div>
 
     <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}?v=20260504i"></script>
+    <script src="{% static 'js/main.js' %}?v=20260605resp"></script>
     <script src="{% static 'js/swiper-js.min.js' %}"></script>
     <script src="{% static 'js/search-suggest.js' %}?v=20260602b"></script>
 </body>

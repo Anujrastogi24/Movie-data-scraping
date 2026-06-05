@@ -8,7 +8,7 @@
     <meta property="og:title" content="{{ movie.Title }} : MovieCinema">
     <meta property="og:description" content="{{ movie.description }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260603a">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260605resp">
     <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
     <title>{{ movie.Title }} : MovieCinema</title>
     <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
@@ -19,7 +19,11 @@
     <header>
         <div class="nav container">
             <a href="{% url 'home' %}" class="logo">Movie<span>Cinema</span></a>
-            <nav class="site-menu" aria-label="Primary navigation">
+            <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu"
+                    aria-controls="site-menu" aria-expanded="false">
+                <i class="bx bx-menu"></i>
+            </button>
+            <nav class="site-menu" id="site-menu" aria-label="Primary navigation">
                 <a href="{% url 'home' %}">Home</a>
                 <a href="{% url 'home' %}?type=movie">Movies</a>
                 <a href="{% url 'home' %}?type=tv">TV Shows</a>
@@ -184,7 +188,7 @@
     </div>
 
     <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}?v=20260504j"></script>
+    <script src="{% static 'js/main.js' %}?v=20260605resp"></script>
     <script src="{% static 'js/swiper-js.min.js' %}"></script>
 </body>
 

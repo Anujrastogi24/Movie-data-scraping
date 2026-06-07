@@ -170,12 +170,4 @@ Schedule provider refresh (cron / Windows Task Scheduler):
 python manage.py refresh_providers            # all stale (>7 days) movies
 python manage.py refresh_providers --limit 50 # cap work per run
 ```
-
-## Notes
-
-- `DEBUG = True` and a development `SECRET_KEY` are set in `settings.py`. These
-  are **not suitable for production** — set `DEBUG = False`, supply a secret key
-  from the environment, and restrict `ALLOWED_HOSTS` before deploying.
-- Watch-provider discovery uses **legal sources only** — no piracy sites. Some
-  free-streaming scrapers are best-effort and may need maintenance.
-- Scraping targets third-party sites and may break if those sites change.
+this project is designed for only automation purpose not responsible for unnecessary uses of any infrigments.

@@ -145,8 +145,14 @@ def _start_chrome(options: "Options") -> "WebDriver":
 
     1. Bundled ``chromedriver.exe`` — fast/offline, but breaks when its version
        lags the installed Chrome (the classic "only supports Chrome version N").
-    2. Selenium Manager — ``webdriver.Chrome(options=...)`` with no Service lets
-       Selenium auto-download a matching driver. Needs one-time internet access.
+    2. Selenium Manager (explicit resolve) — ask Selenium Manager to *download* a
+       driver matching the installed Chrome into its own cache and use that exact
+       path. We resolve explicitly (rather than the bare ``webdriver.Chrome()``
+       form) because a stale ``chromedriver.exe`` on PATH — e.g. the bundled v114
+       in the project root — gets picked up first and re-triggers the very
+       "only supports Chrome version N" mismatch we're trying to escape.
+
+    Needs one-time internet access for the download; afterwards it's cached.
     """
     errors = []
     if os.path.exists(CHROMEDRIVER_PATH):
@@ -154,14 +160,34 @@ def _start_chrome(options: "Options") -> "WebDriver":
             return webdriver.Chrome(service=Service(CHROMEDRIVER_PATH), options=options)
         except WebDriverException as exc:
             errors.append(f"bundled chromedriver: {exc.msg or exc}")
-            logger.info("Bundled chromedriver unusable (%s); trying Selenium Manager.",
-                        (exc.msg or str(exc)).splitlines()[0])
+            logger.info("Bundled chromedriver unusable (%s); resolving a matching driver "
+                        "via Selenium Manager.", (exc.msg or str(exc)).splitlines()[0])
 
     try:
-        return webdriver.Chrome(options=options)  # Selenium Manager resolves the driver
+        driver_path = _resolve_chromedriver()
+        return webdriver.Chrome(service=Service(driver_path), options=options)
     except WebDriverException as exc:
         errors.append(f"selenium manager: {exc}")
         raise RuntimeError("Could not start Chrome: " + " | ".join(errors)) from exc
+    except Exception as exc:  # selenium-manager resolution failed (network/binary)
+        errors.append(f"selenium manager: {exc}")
+        raise RuntimeError("Could not start Chrome: " + " | ".join(errors)) from exc
+
+
+def _resolve_chromedriver() -> str:
+    """Return an absolute path to a chromedriver matching the installed Chrome.
+
+    Drives Selenium Manager directly so it downloads/caches the right driver for
+    the local Chrome version, ignoring any mismatched ``chromedriver`` on PATH.
+    """
+    from selenium.webdriver.common.selenium_manager import SeleniumManager
+
+    paths = SeleniumManager().binary_paths(["--browser", "chrome"])
+    driver_path = paths.get("driver_path")
+    if not driver_path or not os.path.exists(driver_path):
+        raise RuntimeError(f"Selenium Manager returned no usable driver_path ({paths!r}).")
+    logger.info("Selenium Manager resolved chromedriver: %s", driver_path)
+    return driver_path
 
 
 def wait_for(driver: "WebDriver", by: str, selector: str, timeout: int = DEFAULT_WAIT) -> Optional["WebElement"]:

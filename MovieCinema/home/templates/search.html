@@ -1,13 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results : MovieCinema</title>
+    <!-- Link To CSS-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- fav Icon-->
+    <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
+    <!--Box icon-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+</head>
 
-<center> 
-    <h1>Movie Preview</h1>
-    <br>
-    <hr>
-    {% for i in queryset%}
-    <h2>Movie Title : {{i.Title}} </h2><br>
-    <img src="{{i.image}}" alt="" class="home-img"><br><br>
-    <p>{{i.description}}</p>
-    <br>
-    <hr>
-<center>
+<body>
+    <!--   Header    -->
+    <header>
+        <div class="nav container">
+            <a href="{% url 'home' %}" class="logo">
+                Movie<span>Cinema</span>
+            </a>
+            <form action="{% url 'searchdata' %}" method="POST">
+                {% csrf_token %}
+                <div class="search-box">
+                    <input type="search" name="Title" id="search-input" placeholder="Search movie">
+                    <button type="submit" value="Insert"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <main class="page">
+        <h1 class="page-title">Search <span>Results</span></h1>
+
+        <div class="result-grid">
+            {% for i in queryset %}
+            <article class="result-card">
+                <img src="{{ i.image }}" alt="{{ i.Title }}">
+                <div class="result-body">
+                    <h3>{{ i.Title }}</h3>
+                    <p>{{ i.description }}</p>
+                </div>
+            </article>
+            {% empty %}
+            <p class="empty-state">No movies matched your search.</p>
+            {% endfor %}
+        </div>
+    </main>
+
+    <div class="copyright">
+        <p>&#169; MovieCinema All Right Reserved</p>
+    </div>
+</body>
+
+</html>

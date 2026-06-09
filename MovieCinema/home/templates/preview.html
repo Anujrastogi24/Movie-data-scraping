@@ -1,28 +1,55 @@
-
-!DOCTYPE html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="http://vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
-    <script src="http://vjs.zencdn.net/4.12/video.js"></script>
-
-    <title>Preview page</title>
+    <title>Movie Preview : MovieCinema</title>
+    <!-- Link To CSS-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- fav Icon-->
+    <link rel="fav icon" href="{% static 'img/favicon.png' %}" type="image/x-icon">
+    <!--Box icon-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 </head>
+
 <body>
-   <center> 
-        <h1>Movie Preview</h1>
-        <br>
-        <hr>
-        {% for i in key1 %}
-        <h2>Movie Title : {{i.title}} </h2><br>
-        <img src="{{i.image}}" alt="" class="home-img"><br><br>
-        <p>{{i.description}}</p>
-        <br>
-        <hr>
-        {% endfor %}
-    </center>
+    <!--   Header    -->
+    <header>
+        <div class="nav container">
+            <a href="{% url 'home' %}" class="logo">
+                Movie<span>Cinema</span>
+            </a>
+            <a href="{% url 'user' %}" class="page-link" style="margin-left:auto;">
+                <i class='bx bx-plus'></i> Add Movie
+            </a>
+        </div>
+    </header>
+
+    <main class="page">
+        <h1 class="page-title">Movie <span>Preview</span></h1>
+        <p class="page-subtitle">All movies currently in the catalogue</p>
+
+        <div class="result-grid">
+            {% for i in key1 %}
+            <article class="result-card">
+                <img src="{{ i.image }}" alt="{{ i.Title }}">
+                <div class="result-body">
+                    <h3>{{ i.Title }}</h3>
+                    <p>{{ i.description }}</p>
+                </div>
+            </article>
+            {% empty %}
+            <p class="empty-state">No movies added yet.</p>
+            {% endfor %}
+        </div>
+    </main>
+
+    <div class="copyright">
+        <p>&#169; MovieCinema All Right Reserved</p>
+    </div>
 </body>
+
 </html>

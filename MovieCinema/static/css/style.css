@@ -584,9 +584,9 @@ header {
 } */
 
 .download-links {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: left;
-
-    
     gap: 10px;
     margin-bottom: 2rem;
 }
@@ -761,7 +761,7 @@ header {
     }
 
     .movies-content {
-        grid-template-columns: repeat(autofit, minmax(214px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(214px, 1fr));
     }
 }
 
@@ -916,7 +916,7 @@ header {
     }
 
     .movies-content {
-        grid-template-columns: repeat(autofit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }
 }
 
@@ -951,7 +951,159 @@ header {
     }
 
     .download-links {
-        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+}
 
+/* ===========================================================
+   Shared responsive components (forms / results / preview)
+   used by user.html, preview.html and search.html
+   =========================================================== */
+
+/* Page wrapper that keeps content centered and padded on every device */
+.page {
+    max-width: 1060px;
+    width: 92%;
+    margin: 7rem auto 4rem;
+}
+
+.page-title {
+    text-align: center;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.page-title span {
+    color: var(--main-color);
+}
+
+.page-subtitle {
+    text-align: center;
+    color: var(--main-color);
+    font-size: 0.938rem;
+    margin-bottom: 2rem;
+}
+
+/* Card form (Add Movie / admin) — fluid up to a comfortable max width */
+.form-card {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--container-color);
+    border: 1px solid hsl(200 100% 99% / 5%);
+    border-radius: 0.6rem;
+    padding: clamp(1.2rem, 4vw, 2rem);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.1rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid hsl(200 100% 99% / 10%);
+    border-radius: 0.4rem;
+    background: var(--body-color);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--main-color);
+}
+
+.form-group textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.btn-primary {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 0.4rem;
+    background: var(--main-color);
+    color: var(--body-color);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-primary:hover {
+    background: var(--hover-color);
+    transition: 0.3s all linear;
+}
+
+.page-link {
+    color: var(--main-color);
+    font-weight: 500;
+}
+
+/* Result / preview list — responsive grid of movie cards */
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.5rem;
+}
+
+.result-card {
+    background: var(--container-color);
+    border: 1px solid hsl(200 100% 99% / 5%);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.result-card img {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+}
+
+.result-card .result-body {
+    padding: 12px 14px;
+}
+
+.result-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.result-card p {
+    font-size: 0.85rem;
+    color: #b7b7b7;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.empty-state {
+    text-align: center;
+    color: #b7b7b7;
+    margin-top: 2rem;
+}
+
+@media (max-width: 408px) {
+    .result-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 1rem;
     }
 }
